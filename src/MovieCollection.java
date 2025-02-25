@@ -23,7 +23,7 @@ public class MovieCollection
         return movies;
     }
 
-    public ArrayList<String> getGenres(){
+    public void setGenres(){
         for (int i = 1; i<movies.size();i++){
             String[] parsed = movies.get(i).getGenres().split("\\|");
                 for (int j = 0; j<parsed.length;j++){
@@ -37,8 +37,10 @@ public class MovieCollection
                 simplifiedGenres.add(genres.get(i));
             }
         }
-        return simplifiedGenres;
+        genres = simplifiedGenres;
     }
+
+
 
     public void menu()
     {
@@ -316,13 +318,51 @@ public class MovieCollection
 
     private void listGenres()
     {
-        System.out.println(genres);
+        setGenres();
+        for (int i = 0; i < genres.size(); i++)
+        {
+            String genre = genres.get(i);
 
+            // this will print index 0 as choice 1 in the results list; better for user!
+            int choiceNum = i + 1;
+
+            System.out.println("" + choiceNum + ". " + genre);
+        }
+        System.out.println("Choose a genre");
+        System.out.print("Enter number: ");
+
+        int choice = scanner.nextInt();
+        scanner.nextLine();
+
+        String selectedGenre = genres.get(choice - 1);
+        for (int i = 0; i<movies.size();i++){
+            if (movies.get(i).getGenres().contains(selectedGenre))
+        }
 
     }
 
     private void listHighestRated()
     {
+        Double[] ratings = new Double[movies.size()];
+        for (int i = 0; i< ratings.length;i++){
+            ratings[i] = movies.get(i).getUserRating();
+        }
+        Arrays.sort(ratings);
+        Double[] top50 = new Double[50];
+        int num = ratings.length-1;
+        for (int i =0; i< top50.length;i++){
+            top50[i] = ratings[num];
+            num--;
+        }
+        for (int i = 0; i < top50.length; i++)
+        {
+            Double rating = top50[i];
+
+            // this will print index 0 as choice 1 in the results list; better for user!
+            int choiceNum = i + 1;
+
+            System.out.println("" + choiceNum + ". " + rating);
+        }
 
     }
 
