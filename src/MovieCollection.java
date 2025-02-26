@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
+import java.util.Collections;
 
 public class MovieCollection
 {
@@ -189,26 +190,29 @@ public class MovieCollection
         System.out.print("Enter a cast member: ");
         String searchMember = scanner.nextLine();
 
-        // prevent case sensitivity
-        searchMember = searchMember.toLowerCase();
-
         // arraylist to hold search results
         ArrayList<Movie> results = new ArrayList<Movie>();
         ArrayList<String> actors = new ArrayList<String>();
+        ArrayList<String> n = new ArrayList<String>();
 
+        for (int i = 0; i<movies.size();i++){
+            for (String x : movies.get(i).getCast().split("\\|")){
+                n.add(x);
+            }
+        }
         for (int i = 0; i<movies.size();i++){
             String castM = movies.get(i).getCast();
             castM = castM.toLowerCase();
-            String[] n = movies.get(i).getCast().split("\\|");
-
-            if (castM.contains(searchMember)){
-                for (int j = 0; j<n.length;j++){
-                    if (n[j].contains(searchMember) && actors.indexOf(n[j]) == -1){
-                        actors.add(n[j]);
+            String[] parsed = castM.split("\\|");
+            if (castM.contains(searchMember.toLowerCase())){
+                for (int j = 0; j< parsed.length;j++){
+                    if (parsed[j].contains(searchMember) && actors.indexOf(parsed[j]) == -1){
+                        actors.add(parsed[j]);
                     }
                 }
             }
         }
+        Collections.sort(actors, String.CASE_INSENSITIVE_ORDER);
 
         for (int i = 0; i < actors.size(); i++)
         {
@@ -231,7 +235,7 @@ public class MovieCollection
         // search through ALL movies in collection
         for (int i = 0; i < movies.size(); i++)
         {
-            if (movies.get(i).getCast().contains(selectedActor))
+            if (movies.get(i).getCast().toLowerCase().contains(selectedActor))
             {
                 //add the Movie objest to the results list
                 results.add(movies.get(i));
@@ -335,35 +339,44 @@ public class MovieCollection
         scanner.nextLine();
 
         String selectedGenre = genres.get(choice - 1);
+        ArrayList<Movie> newm = new ArrayList<Movie>();
         for (int i = 0; i<movies.size();i++){
-            if (movies.get(i).getGenres().contains(selectedGenre))
+            if (movies.get(i).getGenres().contains(selectedGenre)){
+                newm.add(movies.get(i));
+
+            }
         }
+        int num = 0;
+        for (Movie m : newm){
+            num++;
+            System.out.println(num + "." + " " + m.getTitle());
+        }
+        System.out.println("Which movie would you like to learn more about?");
+        System.out.print("Enter number: ");
+
+        int choice2 = scanner.nextInt();
+        scanner.nextLine();
+
+        Movie selectedMovie = newm.get(choice2 - 1);
+
+        displayMovieInfo(selectedMovie);
+
+        System.out.println("\n ** Press Enter to Return to Main Menu **");
+        scanner.nextLine();
 
     }
 
     private void listHighestRated()
     {
-        Double[] ratings = new Double[movies.size()];
-        for (int i = 0; i< ratings.length;i++){
-            ratings[i] = movies.get(i).getUserRating();
+        Movie[] rating = new Movie[movies.size()];
+        for (int i = 0; i<movies.size();i++){
+            rating[i] = movies.get(i);
         }
-        Arrays.sort(ratings);
-        Double[] top50 = new Double[50];
-        int num = ratings.length-1;
-        for (int i =0; i< top50.length;i++){
-            top50[i] = ratings[num];
-            num--;
+        for (int i = 0; i< rating.length-1;i++) {
+            if (Double.compare(rating[i].getUserRating(), rating[i + 1].getUserRating()) < 0){
+
+            }
         }
-        for (int i = 0; i < top50.length; i++)
-        {
-            Double rating = top50[i];
-
-            // this will print index 0 as choice 1 in the results list; better for user!
-            int choiceNum = i + 1;
-
-            System.out.println("" + choiceNum + ". " + rating);
-        }
-
     }
 
     private void listHighestRevenue()
