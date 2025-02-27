@@ -372,11 +372,19 @@ public class MovieCollection
         for (int i = 0; i<movies.size();i++){
             rating[i] = movies.get(i);
         }
-        for (int i = 0; i< rating.length-1;i++) {
-            if (Double.compare(rating[i].getUserRating(), rating[i + 1].getUserRating()) < 0){
-
+        boolean b = true;
+        while (b) {
+        b = false;
+        for (int j = 0; j < rating.length - 1;j++) {
+            if (Double.compare(rating[j].getUserRating(), rating[j + 1].getUserRating()) < 0) {
+                Movie temp = rating[j];
+                rating[j] = rating[j + 1];
+                rating[j + 1] = temp;
+                b = true;
             }
+            j++;
         }
+    }
     }
 
     private void listHighestRevenue()
