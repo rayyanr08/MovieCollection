@@ -372,24 +372,47 @@ public class MovieCollection
         for (int i = 0; i<movies.size();i++){
             rating[i] = movies.get(i);
         }
-        boolean b = true;
-        while (b) {
-        b = false;
-        for (int j = 0; j < rating.length - 1;j++) {
-            if (Double.compare(rating[j].getUserRating(), rating[j + 1].getUserRating()) < 0) {
-                Movie temp = rating[j];
-                rating[j] = rating[j + 1];
-                rating[j + 1] = temp;
-                b = true;
+
+        Arrays.sort(rating, (x,y) -> Double.compare(y.getUserRating(), x.getUserRating()));
+
+        int num = 0;
+        for (int i = 0; i<50;i++){
+                num++;
+                System.out.println(num + "." + " " + rating[i].getTitle() + ": " + rating[i].getUserRating());
             }
-            j++;
-        }
-    }
+            System.out.println("Which movie would you like to learn more about?");
+            System.out.print("Enter number: ");
+
+            int choice2 = scanner.nextInt();
+            scanner.nextLine();
+
+            Movie selectedMovie = rating[choice2 - 1];
+
+            displayMovieInfo(selectedMovie);
     }
 
     private void listHighestRevenue()
     {
+         Movie[] revenue = new Movie[movies.size()];
+        for (int i = 0; i<movies.size();i++){
+            revenue[i] = movies.get(i);
+        }
 
+        Arrays.sort(revenue, (a,b) -> Double.compare(b.getRevenue(), a.getRevenue()));
+        int num = 0;
+        for (int i = 0; i<50;i++){
+            num++;
+            System.out.println(num + "." + " " + revenue[i].getTitle() + ": " + revenue[i].getRevenue());
+        }
+        System.out.println("Which movie would you like to learn more about?");
+        System.out.print("Enter number: ");
+
+        int choice2 = scanner.nextInt();
+        scanner.nextLine();
+
+        Movie selectedMovie = revenue[choice2 - 1];
+
+        displayMovieInfo(selectedMovie);
     }
 
     private void importMovieList(String fileName)
